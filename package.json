@@ -9,8 +9,9 @@
   "author": "AlexB",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^2.7.1",
     "express": "^4.17.1",
-    "highlight-javascript-syntax": "^1.1.0"
+    "save": "^2.4.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"

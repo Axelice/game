@@ -12,6 +12,7 @@ if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir);
 }
 
+app.set('view engine', 'ejs');
 
 app.use(express.static("src/public"));
 
@@ -32,7 +33,9 @@ app.get("/resultsX0", (req, res) => {
   if (!result) {
     result = 'draw';
   }
-  res.json(result);
+  var todos = [];
+  todos.push(result);
+  res.render("index.ejs", {todos});
 });
 
 
