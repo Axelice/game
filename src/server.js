@@ -1,6 +1,6 @@
 const express = require("express");
 const { parse } = require("querystring");
-const highlight = require("highlight-javascript-syntax");
+// const highlight = require("highlight-javascript-syntax");
 const vm = require('vm');
 
 const app = express();
@@ -32,7 +32,8 @@ function collectRequestData(request, callback) {
 
 app.post("/saveScript", (req, res) => {
   collectRequestData(req, result => {
-    const code = result.script.replace(/(\r\n|\n|\r)/gm, "");
+    const code = result.script;
+    console.log(code)
     const emailDir = `./tmp/${result.email}`;
     const file = `${emailDir}/script.js`;
 
@@ -54,13 +55,19 @@ app.post("/saveScript", (req, res) => {
     });
 
     res.end(`
-        <!doctype html>
+        <!DOCTYPE html>
         <html>
         <head>
-        <link rel="stylesheet" href="/highlight.css">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/arta.min.css">
         </head>
         <body>
-            ${highlight(code)}
+            <pre>
+              <code class="javascript">
+                  ${code}
+              </code>
+            </pre>
         </body>
         </body>
         </html>
