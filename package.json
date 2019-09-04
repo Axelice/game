@@ -2,9 +2,9 @@
   "name": "game",
   "version": "1.0.0",
   "description": "",
-  "main": "src/server.js",
+  "main": "src/server/index.js",
   "scripts": {
-    "start": "nodemon --inspect src/server.js"
+    "start": "nodemon --inspect src/server/index.js"
   },
   "author": "AlexB",
   "license": "ISC",
