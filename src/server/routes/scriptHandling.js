@@ -1,6 +1,5 @@
 const fs = require("fs");
 const { parse } = require("querystring");
-const highlight = require("highlight-javascript-syntax");
 
 module.exports = function(app) {
   function collectRequestData(request, callback) {
@@ -20,7 +19,7 @@ module.exports = function(app) {
 
   app.post("/saveScript", (req, res) => {
     collectRequestData(req, result => {
-      const code = result.script.replace(/(\r\n|\n|\r)/gm, "");
+      const code = result.script;
       const emailDir = `./tmp/${result.email}`;
       const file = `${emailDir}/script.js`;
 
@@ -35,16 +34,22 @@ module.exports = function(app) {
       fs.writeFileSync(file, code);
 
       res.end(`
-          <!doctype html>
-          <html>
-          <head>
-          <link rel="stylesheet" href="/highlight.css">
-          </head>
-          <body>
-              ${highlight(code)}
-          </body>
-          </body>
-          </html>
+      <!DOCTYPE html>
+      <html>
+      <head>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/arta.min.css">
+      </head>
+      <body>
+          <pre>
+            <code class="javascript">
+                ${code}
+            </code>
+          </pre>
+      </body>
+      </body>
+      </html>
       `);
     });
   });
