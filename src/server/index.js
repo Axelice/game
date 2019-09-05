@@ -5,6 +5,15 @@ const fs = require("fs");
 const app = express();
 const port = 3000;
 
+const getFinalResults = (games, result) => {
+  let counter = 0;
+  games.forEach(element => {
+    if(element.winner === result){
+      counter++
+    }
+  });
+  return counter;
+}
 
 var dir = "./tmp";
 
@@ -20,46 +29,73 @@ require('./routes/scriptHandling.js')(app);
 
 const { runGame: runXO } = require('./games/runX0.js');
 app.get("/resultsX0", (req, res) => {
-  let firstScript = fs.readFileSync(`${dir}/firstScript/script.js`, 'utf8');
-  firstScript += 'return runRound;';
-  let secondScript = fs.readFileSync(`${dir}/secondScript/script.js`, 'utf8');
-  secondScript += 'return runRound;';
-  const firstRunnerContext = vm.createContext({});
-  const secondRunnerContext = vm.createContext({});
 
-  const firstRunner = vm.compileFunction(firstScript, [], firstRunnerContext);
-  const secondRunner = vm.compileFunction(firstScript, [], secondRunnerContext);
-  let result = runXO([firstRunner, secondRunner])
-  if (!result) {
-    result = 'draw';
+  let games = [{
+    id: 1,
+    gameName: "X&0",
+    winner: "Player 1"
+  },{
+    id: 2,
+    gameName: "X&0",
+    winner: "Player 2"
+  }, {
+    id: 3,
+    gameName: "X&0",
+    winner: "Player 2"
+  },{
+    id: 4,
+    gameName: "X&0",
+    winner: "Player 2"
+  },{
+    id: 5,
+    gameName: "X&0",
+    winner: "Draw"
+  }];
+
+  const total = {
+    player1: getFinalResults(games, "Player 1"),
+    player2: getFinalResults(games, "Player 2"),
+    draw:getFinalResults(games, "Draw"),
   }
-  var todos = [];
-  todos.push(result);
-  res.render("index.ejs", {todos});
+
+  res.render("index.ejs", {games, total});
 });
 
-const { runGame: runShips } = require('./games/runShips.js');
-app.get("/resultsShip", (req, res) => {
-  let firstScript = fs.readFileSync(`${dir}/firstScript/shipScrip.js`, 'utf8');
-  firstScript += 'return {runRound, getShips};';
-  let secondScript = fs.readFileSync(`${dir}/secondScript/shipScrip.js`, 'utf8');
-  secondScript += 'return {runRound, getShips};';
-  const firstRunnerContext = vm.createContext({});
-  const secondRunnerContext = vm.createContext({});
+app.get("/rankingsX&0", (req, res) => {
 
-  const firstActions = vm.compileFunction(firstScript, [], firstRunnerContext)();
-  const secondActions = vm.compileFunction(secondScript, [], secondRunnerContext)();
-  let result = runShips([{
-    playerId: 'first',
-    actions: firstActions
+  let results = [{
+    id: 1,
+    gameName: "X&0",
+    player: "Player 1",
+    wins:10
+  },{
+    id: 2,
+    gameName: "X&0",
+    player: "Player 2",
+    wins:8
   }, {
-    playerId: 'second',
-    actions: secondActions,
-  }])
-  if (!result) {
-    result = 'draw';
-  }
-  res.json(result);
+    id: 3,
+    gameName: "X&0",
+    player: "Player 3",
+    wins:7
+  },{
+    id: 4,
+    gameName: "X&0",
+    player: "Alberto",
+    wins: 4
+  },{
+    id: 6,
+    gameName: "X&0",
+    player: "Maurice",
+    wins:3
+  },{
+    id: 7,
+    gameName: "X&0",
+    player: "Ciro",
+    wins:1
+  }];
+
+  res.render("rankings.ejs", {results});
 });
 
 
