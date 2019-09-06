@@ -10,7 +10,7 @@ const SHIPS_PARTS_NOT_VALID = "SHIPS_PARTS_NOT_VALID";
 const SHIPS_NOT_VALID = "SHIPS_NOT_VALID";
 const SHIPS_OVERLAP = "SHIPS_OVERLAP";
 const HIT = "x";
-const EMPTY = "-";
+const EMPTY = " -- ";
 
 /**
  * shipPart = {
@@ -183,11 +183,23 @@ function runGame(players) {
     });
   }
   console.log("****************");
-  console.log(boardList[0].map(line => line.join(" ")));
+  console.log(
+    boardList[0]
+      .map(line =>
+        line.map(place => (place === undefined ? "~" : place)).join(" ")
+      )
+      .join("\n")
+  );
   console.log("################");
-  console.log(boardList[1].map(line => line.join(" ")));
+  console.log(
+    boardList[1]
+      .map(line =>
+        line.map(place => (place === undefined ? "~" : place)).join(" ")
+      )
+      .join("\n")
+  );
   console.log("****************");
-  return winner;
+  return { winner, boardList };
 }
 
 module.exports = {
