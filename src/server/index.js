@@ -38,7 +38,7 @@ app.get("/resultsX0", (req, res) => {
 });
 
 const { runGame: runShips } = require("./games/runShips.js");
-app.get("/resultsShip", (req, res) => {
+app.get("/testShip", (req, res) => {
   let firstScript = fs.readFileSync(`${dir}/firstScript/shipScrip.js`, "utf8");
   firstScript += "return {runRound, getShips};";
   let secondScript = fs.readFileSync(
@@ -105,5 +105,96 @@ app.get("/resultsShip", (req, res) => {
       </html>
       `);
 });
+
+function getPlayerActions(email, game) {
+  let script = fs.readFileSync(`${dir}/${email}/${game}Scrip.js`, "utf8");
+  script += "return {runRound, getShips};";
+  const context = vm.createContext({});
+  const actions = vm.compileFunction(script, [], context)();
+
+  return actions;
+}
+
+function getPlayers() {
+  let players = fs
+    .readdirSync(`${dir}`, { withFileTypes: true })
+    .filter(item => item.isDirectory())
+    .map(dir => dir.name);
+
+  return players;
+}
+
+app.get("/resultsShip/:email", (req, res) => {
+  const currentPlayer = req.params.email;
+  const players = getPlayers();
+  const GAME_SHIP = "ship";
+
+  const currentPlayerActions = getPlayerActions(currentPlayer, GAME_SHIP);
+
+  const results = players
+    .filter(player => player !== currentPlayer)
+    .map(player => {
+      const playerActions = getPlayerActions(player, GAME_SHIP);
+      let result = runShips([
+        {
+          playerId: currentPlayer,
+          actions: currentPlayerActions
+        },
+        {
+          playerId: player,
+          actions: playerActions
+        }
+      ]);
+
+      const parsedResult = {
+        winner: result.winner,
+        secondPlayer: player,
+        firstPlayerBoard: result.boardList[0]
+          .map(line =>
+            line.map(place => (place === undefined ? " ~ " : place)).join(" ")
+          )
+          .join("<br>"),
+        secondPlayerBoard: result.boardList[1]
+          .map(line =>
+            line.map(place => (place === undefined ? " ~ " : place)).join(" ")
+          )
+          .join("<br>")
+      };
+      return parsedResult;
+    });
+
+  res.end(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+      </head>
+      <body>
+        <h1>Player: ${currentPlayer}</h1>
+        ${parseResults(currentPlayer, results)}
+      </body>
+      </body>
+      </html>
+      `);
+});
+
+function parseResults(currentPlayer, results) {
+  return results.map(result => {
+    return `
+      <div>
+        <div style="display: inline-block; width: 160px;">
+          <h3>You</h3>
+          <p style="color: ${result.winner === currentPlayer ? "red" : "green"}">
+            ${result.firstPlayerBoard}
+          </p>
+        </div>
+        <div style="display: inline-block; width: 160px; margin-left: 15px; padding-left:50px; border-left: 1px solid gray;">
+          <h3>${result.secondPlayer}</h3>
+          <p style="color: ${result.winner !== currentPlayer ? "red" : "green"}">
+            ${result.secondPlayerBoard}
+          </p>
+        </div>
+      </div>`;
+  });
+}
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
