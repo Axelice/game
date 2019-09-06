@@ -38,5 +38,29 @@ app.get("/resultsX0", (req, res) => {
   res.render("index.ejs", {todos});
 });
 
+const { runGame: runShips } = require('./games/runShips.js');
+app.get("/resultsShip", (req, res) => {
+  let firstScript = fs.readFileSync(`${dir}/firstScript/shipScrip.js`, 'utf8');
+  firstScript += 'return {runRound, getShips};';
+  let secondScript = fs.readFileSync(`${dir}/secondScript/shipScrip.js`, 'utf8');
+  secondScript += 'return {runRound, getShips};';
+  const firstRunnerContext = vm.createContext({});
+  const secondRunnerContext = vm.createContext({});
+
+  const firstActions = vm.compileFunction(firstScript, [], firstRunnerContext)();
+  const secondActions = vm.compileFunction(secondScript, [], secondRunnerContext)();
+  let result = runShips([{
+    playerId: 'first',
+    actions: firstActions
+  }, {
+    playerId: 'second',
+    actions: secondActions,
+  }])
+  if (!result) {
+    result = 'draw';
+  }
+  res.json(result);
+});
+
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
