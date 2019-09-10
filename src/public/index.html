@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="css/style.css">
   <title>Document</title>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/arta.min.css">
 </head>
 <body>
   <h1>Homepage</h1>
@@ -20,7 +23,53 @@
     <div class="info">
       <h3>Info</h3>
       <div class="content">
-        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quia porro commodi provident quisquam, fugit corporis, ea inventore obcaecati maxime, distinctio delectus eligendi cupiditate? Deserunt inventore commodi, eveniet iure recusandae dolores nam quam repudiandae, consectetur sequi delectus ipsa porro, ipsam perferendis. Iure ipsum qui molestias fuga, ipsa voluptas tempore laborum veritatis at molestiae recusandae quisquam natus animi quod voluptatem hic voluptates atque eum itaque nobis ad possimus libero obcaecati optio? Quisquam consectetur minima fuga maiores itaque dicta similique nulla esse deserunt, eos rem tempore placeat quos nam adipisci ad nisi eum distinctio dolore assumenda possimus reiciendis dolores! Unde molestias quia laborum vitae deleniti, quaerat asperiores pariatur minima atquet nobis voluptate veniam. Nostrum soluta consequuntur, sed magni officia fugiat sint neque animi hic fugit enim iure necessitatibus expedita atque officiis et obcaecati odit eaque deleniti natus excepturi dolorum dolor. Animi repudiandae sapiente nihil eos a, accusantium illo dolores quam, expedita saepe suscipit id ad aut. Totam repudiandae aspernatur iste. Aspernatur fuga ad libero similique!</p>
+        <p>
+          Example:
+          <pre>
+              <code class="javascript">
+          const getShips = function() {
+            return [
+              [
+                { posX: 1, posY: 1 },
+                { posX: 2, posY: 1 },
+                { posX: 3, posY: 1 },
+                { posX: 4, posY: 1 }
+              ],
+              [
+                { posX: 5, posY: 3 },
+                { posX: 6, posY: 3 },
+                { posX: 7, posY: 3 },
+                { posX: 8, posY: 3 }
+              ],
+              [
+                { posX: 3, posY: 6 },
+                { posX: 4, posY: 6 },
+                { posX: 5, posY: 6 },
+                { posX: 6, posY: 6 }
+              ]
+            ];
+          };
+          
+          const runRound = function({board}) {
+            let steps = 0;
+            let solution;
+            while (steps < 5) {
+              solution = {
+                posX: Math.floor(Math.random() * 10),
+                posY: Math.floor(Math.random() * 10)
+              };
+          
+              if (board[solution.posX][solution.posY] === undefined) {
+                steps = 5;
+              } else {
+                steps++;
+              }
+            }
+            return solution;
+          };      
+        </code>
+      </pre>    
+        </p>
       </div>
       <button id="showMore" class="btn">Show More...</button>
       <button id="showLess" class="btn showLess">Show Less</button>
