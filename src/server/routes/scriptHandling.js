@@ -21,7 +21,7 @@ module.exports = function(app) {
     collectRequestData(req, result => {
       const code = result.script;
       const emailDir = `./tmp/${result.email}`;
-      const file = `${emailDir}/script.js`;
+      const file = `${emailDir}/shipScript.js`;
 
       if (!fs.existsSync(emailDir)) {
         fs.mkdirSync(emailDir);
@@ -47,6 +47,7 @@ module.exports = function(app) {
                 ${code}
             </code>
           </pre>
+          <a href="resultsShip/${result.email}"> Run vs others </a>
       </body>
       </body>
       </html>

@@ -8,12 +8,12 @@ const port = 3000;
 const getFinalResults = (games, result) => {
   let counter = 0;
   games.forEach(element => {
-    if(element.winner === result){
-      counter++
+    if (element.winner === result) {
+      counter++;
     }
   });
   return counter;
-}
+};
 
 var dir = "./tmp";
 
@@ -29,10 +29,10 @@ require("./routes/scriptHandling.js")(app);
 
 const { runGame: runShips } = require("./games/runShips.js");
 app.get("/testShip", (req, res) => {
-  let firstScript = fs.readFileSync(`${dir}/firstScript/shipScrip.js`, "utf8");
+  let firstScript = fs.readFileSync(`${dir}/firstScript/shipScript.js`, "utf8");
   firstScript += "return {runRound, getShips};";
   let secondScript = fs.readFileSync(
-    `${dir}/secondScript/shipScrip.js`,
+    `${dir}/secondScript/shipScript.js`,
     "utf8"
   );
   secondScript += "return {runRound, getShips};";
@@ -95,110 +95,129 @@ app.get("/testShip", (req, res) => {
       </html>
       `);
 
-  let games = [{
-    id: 1,
-    gameName: "X&0",
-    winner: "Player 1"
-  },{
-    id: 2,
-    gameName: "X&0",
-    winner: "Player 2"
-  }, {
-    id: 3,
-    gameName: "X&0",
-    winner: "Player 2"
-  },{
-    id: 4,
-    gameName: "X&0",
-    winner: "Player 2"
-  },{
-    id: 5,
-    gameName: "X&0",
-    winner: "Draw"
-  }];
+  let games = [
+    {
+      id: 1,
+      gameName: "X&0",
+      winner: "Player 1"
+    },
+    {
+      id: 2,
+      gameName: "X&0",
+      winner: "Player 2"
+    },
+    {
+      id: 3,
+      gameName: "X&0",
+      winner: "Player 2"
+    },
+    {
+      id: 4,
+      gameName: "X&0",
+      winner: "Player 2"
+    },
+    {
+      id: 5,
+      gameName: "X&0",
+      winner: "Draw"
+    }
+  ];
 
   const total = {
     player1: getFinalResults(games, "Player 1"),
     player2: getFinalResults(games, "Player 2"),
-    draw:getFinalResults(games, "Draw"),
-  }
+    draw: getFinalResults(games, "Draw")
+  };
 
-  res.render("index.ejs", {games, total});
+  res.render("index.ejs", { games, total });
 });
 
 app.get("/resultsX0", (req, res) => {
-  let games = [{
-    id: 1,
-    gameName: "X&0",
-    winner: "Player 1"
-  },{
-    id: 2,
-    gameName: "X&0",
-    winner: "Player 2"
-  }, {
-    id: 3,
-    gameName: "X&0",
-    winner: "Player 2"
-  },{
-    id: 4,
-    gameName: "X&0",
-    winner: "Player 2"
-  },{
-    id: 5,
-    gameName: "X&0",
-    winner: "Draw"
-  }];
+  let games = [
+    {
+      id: 1,
+      gameName: "X&0",
+      winner: "Player 1"
+    },
+    {
+      id: 2,
+      gameName: "X&0",
+      winner: "Player 2"
+    },
+    {
+      id: 3,
+      gameName: "X&0",
+      winner: "Player 2"
+    },
+    {
+      id: 4,
+      gameName: "X&0",
+      winner: "Player 2"
+    },
+    {
+      id: 5,
+      gameName: "X&0",
+      winner: "Draw"
+    }
+  ];
 
   const total = {
     player1: getFinalResults(games, "Player 1"),
     player2: getFinalResults(games, "Player 2"),
-    draw:getFinalResults(games, "Draw"),
-  }
+    draw: getFinalResults(games, "Draw")
+  };
 
-  res.render("index.ejs", {games, total});
-})
-
+  res.render("index.ejs", { games, total });
+});
 
 app.get("/rankingsX&0", (req, res) => {
+  let results = [
+    {
+      id: 1,
+      gameName: "X&0",
+      player: "Player 1",
+      wins: 10
+    },
+    {
+      id: 2,
+      gameName: "X&0",
+      player: "Player 2",
+      wins: 8
+    },
+    {
+      id: 3,
+      gameName: "X&0",
+      player: "Player 3",
+      wins: 7
+    },
+    {
+      id: 4,
+      gameName: "X&0",
+      player: "Alberto",
+      wins: 4
+    },
+    {
+      id: 6,
+      gameName: "X&0",
+      player: "Maurice",
+      wins: 3
+    },
+    {
+      id: 7,
+      gameName: "X&0",
+      player: "Ciro",
+      wins: 1
+    }
+  ];
 
-  let results = [{
-    id: 1,
-    gameName: "X&0",
-    player: "Player 1",
-    wins:10
-  },{
-    id: 2,
-    gameName: "X&0",
-    player: "Player 2",
-    wins:8
-  }, {
-    id: 3,
-    gameName: "X&0",
-    player: "Player 3",
-    wins:7
-  },{
-    id: 4,
-    gameName: "X&0",
-    player: "Alberto",
-    wins: 4
-  },{
-    id: 6,
-    gameName: "X&0",
-    player: "Maurice",
-    wins:3
-  },{
-    id: 7,
-    gameName: "X&0",
-    player: "Ciro",
-    wins:1
-  }];
-
-  res.render("rankings.ejs", {results});
+  res.render("rankings.ejs", { results });
 });
 
 function getPlayerActions(email, game) {
-  let script = fs.readFileSync(`${dir}/${email}/${game}Scrip.js`, "utf8");
+  let script = fs
+    .readFileSync(`${dir}/${email}/${game}Script.js`, "utf8");
   script += "return {runRound, getShips};";
+  script.replace(/(\r\n|\n|\r)/gm, "");
   const context = vm.createContext({});
   const actions = vm.compileFunction(script, [], context)();
 
@@ -273,13 +292,17 @@ function parseResults(currentPlayer, results) {
       <div>
         <div style="display: inline-block; width: 160px;">
           <h3>You</h3>
-          <p style="color: ${result.winner === currentPlayer ? "red" : "green"}">
+          <p style="color: ${
+            result.winner === currentPlayer ? "red" : "green"
+          }">
             ${result.firstPlayerBoard}
           </p>
         </div>
         <div style="display: inline-block; width: 160px; margin-left: 15px; padding-left:50px; border-left: 1px solid gray;">
           <h3>${result.secondPlayer}</h3>
-          <p style="color: ${result.winner !== currentPlayer ? "red" : "green"}">
+          <p style="color: ${
+            result.winner !== currentPlayer ? "red" : "green"
+          }">
             ${result.secondPlayerBoard}
           </p>
         </div>
