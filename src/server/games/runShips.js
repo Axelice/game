@@ -121,7 +121,7 @@ const getBoardWithShips = function(shipList) {
   return board;
 };
 
-function runGame(players) {
+export function runGame(players) {
   const boardList = [];
   let winner;
 
@@ -201,7 +201,3 @@ function runGame(players) {
   console.log("****************");
   return { winner, boardList };
 }
-
-module.exports = {
-  runGame
-};

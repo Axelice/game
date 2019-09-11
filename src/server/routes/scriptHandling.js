@@ -1,7 +1,7 @@
-const fs = require("fs");
-const { parse } = require("querystring");
+import fs from "fs";
+import { parse } from "querystring";
 
-module.exports = function(app) {
+export default function(app) {
   function collectRequestData(request, callback) {
     const FORM_URLENCODED = "application/x-www-form-urlencoded";
     if (request.headers["content-type"] === FORM_URLENCODED) {
@@ -54,4 +54,4 @@ module.exports = function(app) {
       `);
     });
   });
-};
+}

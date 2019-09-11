@@ -1,6 +1,6 @@
-const express = require("express");
-const vm = require("vm");
-const fs = require("fs");
+import express from "express";
+import vm from "vm";
+import fs from "fs";
 
 const app = express();
 const port = 3000;
@@ -25,9 +25,10 @@ app.set("view engine", "ejs");
 
 app.use(express.static("src/public"));
 
-require("./routes/scriptHandling.js")(app);
+import scriptHandling from "./routes/scriptHandling.js";
+scriptHandling(app);
 
-const { runGame: runShips } = require("./games/runShips.js");
+import { runGame as runShips } from "./games/runShips.js";
 app.get("/testShip", (req, res) => {
   let firstScript = fs.readFileSync(`${dir}/firstScript/shipScript.js`, "utf8");
   firstScript += "return {runRound, getShips};";
@@ -214,8 +215,7 @@ app.get("/rankingsX&0", (req, res) => {
 });
 
 function getPlayerActions(email, game) {
-  let script = fs
-    .readFileSync(`${dir}/${email}/${game}Script.js`, "utf8");
+  let script = fs.readFileSync(`${dir}/${email}/${game}Script.js`, "utf8");
   script += "return {runRound, getShips};";
   script.replace(/(\r\n|\n|\r)/gm, "");
   const context = vm.createContext({});
@@ -309,5 +309,12 @@ function parseResults(currentPlayer, results) {
       </div>`;
   });
 }
+
+import Layout from "./views/Layout.js";
+
+app.get("app/*", (req, res) => {
+  res.writeHead(200, { "Content-Type": "text/html" });
+  res.end(htmlTemplate(getPage()));
+});
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

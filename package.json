@@ -3,17 +3,24 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/server/index.js",
+  "type": "module",
   "scripts": {
-    "start": "nodemon --inspect src/server/index.js"
+    "start": "nodemon --inspect index.js"
   },
   "author": "AlexB",
   "license": "ISC",
   "dependencies": {
-    "ejs": "^2.7.1",
     "express": "^4.17.1",
-    "save": "^2.4.0"
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-router-dom": "^5.0.1"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-dynamic-import-node": "^2.3.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-register": "^6.26.0",
     "nodemon": "^1.19.1"
   }
 }
