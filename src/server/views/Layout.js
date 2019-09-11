@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Switch, Route } from "react-router-dom";
+import { StaticRouter, Link, Switch, Route } from "react-router-dom";
 import { renderToString } from "react-dom/server";
 
 import ShipIndex from "./games/ships/ShipIndex";
@@ -7,34 +7,36 @@ import ShipIndex from "./games/ships/ShipIndex";
 class Layout extends React.Component {
   render() {
     return (
-      <div>
+      <StaticRouter context={{}} location={this.props.url}>
         <div>
-          <Link to="/ships">Ships</Link>
+          <div>
+            <Link to="/app/ships">Ships</Link>
+          </div>
+          <Switch>
+            <Route path="/app/ships" component={ShipIndex} />
+            <Route path="*" render={() => <h1>404</h1>} />
+          </Switch>
         </div>
-        <Switch>
-          <Route path="/ships" exact component={ShipIndex} />
-        </Switch>
-      </div>
+      </StaticRouter>
     );
   }
 }
 
-export default function getPage() {
-  const jsx = <Layout />;
+export function getPage(url) {
+  const jsx = <Layout url={url} />;
   const reactDom = renderToString(jsx);
 
   return `
         <!DOCTYPE html>
         <html>
         <head>
-            <meta charset="utf-8">
             <title>React SSR</title>
         </head>
         
         <body>
             <div id="app">${reactDom}</div>
-            <script src="./app.bundle.js"></script>
         </body>
+
         </html>
     `;
 }

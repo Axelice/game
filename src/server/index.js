@@ -310,11 +310,11 @@ function parseResults(currentPlayer, results) {
   });
 }
 
-import Layout from "./views/Layout.js";
+import { getPage } from "./views/Layout.js";
 
-app.get("app/*", (req, res) => {
+app.get("/app/*", (req, res) => {
   res.writeHead(200, { "Content-Type": "text/html" });
-  res.end(htmlTemplate(getPage()));
+  res.end(getPage(req.url));
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

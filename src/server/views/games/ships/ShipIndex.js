@@ -3,12 +3,13 @@ import { Switch, Route } from "react-router-dom";
 
 import ShipSave from "./ShipSave";
 
-export default class Layout extends React.Component {
-  render() {
-    return (
-      <Switch>
-        <Route path="/shipsAdd" exact component={ShipSave} />
-      </Switch>
-    );
-  }
-}
+const ShipIndex = ({ match }) => (
+  <React.Fragment>
+    <div>TT</div>
+    <Switch>
+      <Route path={`${match.path}/add`} exact component={ShipSave} />
+    </Switch>
+  </React.Fragment>
+);
+
+export default ShipIndex;
