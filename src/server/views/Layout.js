@@ -35,6 +35,7 @@ export function getPage(url) {
         
         <body>
             <div id="app">${reactDom}</div>
+            <script src="./app.bundle.js"></script>
         </body>
 
         </html>
