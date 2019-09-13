@@ -1,9 +1,14 @@
 import express from "express";
+import path from "path";
 import vm from "vm";
 import fs from "fs";
 
 const app = express();
 const port = 3000;
+
+
+app.use( express.static( path.resolve( __dirname, "../../dist" ) ) );
+console.log(path.resolve( __dirname, "../../dist" ));
 
 const getFinalResults = (games, result) => {
   let counter = 0;
@@ -310,7 +315,33 @@ function parseResults(currentPlayer, results) {
   });
 }
 
-import { getPage } from "./views/Layout.js";
+import React from "react";
+import { renderToString } from "react-dom/server";
+import { StaticRouter } from "react-router-dom";
+import Layout from "../client/components/Layout.js";
+
+function getPage(url) {
+  const jsx = (
+    <StaticRouter context={{}} location={url}>
+      <Layout url={url} />
+    </StaticRouter>
+  );
+  const reactDom = renderToString(jsx);
+
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Games</title>
+    </head>
+    
+    <body>
+      <div id="app">${reactDom}</div>
+      <script src="/app.bundle.js"></script>
+    </body>
+    </html>
+    `;
+}
 
 app.get("/app/*", (req, res) => {
   res.writeHead(200, { "Content-Type": "text/html" });
